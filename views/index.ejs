@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <ul id="list">
+      <!-- <li>数据</li> -->
+    </ul>
+    <div class="add">
+      <form action="">
+        <div>
+          id：<input type="number" id="post-id">
+        </div>
+        <div>
+          name：<input type="text" id="post-name">
+        </div>
+        <div>
+          price：<input type="number" id="post-price">
+        </div>
+        <div id="post-btn">send</div>
+      </form>
+    </div>
+  </body>
+  <script type="text/javascript">
+    fetch('http://localhost:3000/goods')
+    .then(function(response) {
+      return response.json()
+    }).then(function(json) {
+      console.log(json)
+      // document.getElementById('list').insertAdjacentHTML('beforeend', '<li>123</li>')
+      json.data.map(function(item, index) {
+        document.getElementById('list').insertAdjacentHTML('beforeend', '<li>' + item.id + '——' + item.name + '——' + item.price + '——' + item.create_time + '</li>')        
+      })
+    }).catch(function(err) {
+      console.log(err)
+    })
+
+    document.getElementById('post-btn').addEventListener('click', function() {
+      console.log('post data to server')
+      fetch('http://localhost:3000/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: document.getElementById('post-id').value,
+          name: document.getElementById('post-name').value,
+          price: document.getElementById('post-price').value
+        })
+      })
+      .then(function(response) {
+        return response.json()
+      }).then(function(json) {
+        console.log(json)
+      }).catch(function(err) {
+        console.log(err)
+      })
+    })
+
+    // fetch('http://localhost:3000/add', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     id: 6,
+    //     name: 'box',
+    //     price: '169.00'
+    //   })
+    // })
+    // .then(function(response) {
+    //   return response.json()
+    // }).then(function(json) {
+    //   console.log(json)
+    // }).catch(function(err) {
+    //   console.log(err)
+    // })
+
+  </script>
+</html>
